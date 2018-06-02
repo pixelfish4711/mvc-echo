@@ -20,18 +20,18 @@ public class EndpointTest {
     private WebClient webClient = WebClient.builder().build();
 
     @Test
-    public void getEcho() {
+    public void getEcho() throws InterruptedException {
 
         AtomicInteger counter = new AtomicInteger();
 
-        IntStream.range(1, 3000).parallel().forEach(i -> {
-            String result = webClient.get().uri("http://localhost:8001/hallo")
-                    .exchange()
-                    .block()
-                    .statusCode().name();
-            LOGGER.info("result: " + counter.incrementAndGet() + " " + result);
-        });
+        IntStream.range(0, 3000).parallel().forEach(i ->
+                webClient.get().uri("http://localhost:8001/hallo")
+                        .retrieve()
+                        .bodyToMono(String.class)
+                        .subscribe(b -> LOGGER.info("result: {}, counter:{}", b, counter.incrementAndGet()))
+        );
 
+        Thread.sleep(10000);
     }
 
 }

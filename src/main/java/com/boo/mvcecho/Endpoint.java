@@ -18,7 +18,7 @@ public class Endpoint {
     @GetMapping("/hallo")
     public String getDelayedEcho() throws InterruptedException {
         LOGGER.info("call /hallo " + counter.incrementAndGet());
-        TimeUnit.MILLISECONDS.sleep(200);
+        TimeUnit.MILLISECONDS.sleep(1000);
         return "Echo";
     }
 
